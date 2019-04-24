@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {Text,View,StyleSheet,TextInput, Button,StatusBar,Image,ScrollView} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import {Actions} from 'react-native-router-flux'
+import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
 function Login() {
     const img_user = <Icon name={"user"}  color={"gray"} size={20}/>
@@ -11,40 +12,62 @@ function Login() {
         Actions.splah()
     }
     return(
-        <ScrollView contentContainerStyle={{flexGrow: 1}}><View style={styles.cajaLogin}>
-        <StatusBar backgroundColor="#D32F2F" barStyle="light-content" />
-        
-        <View style={styles.cajaTitulo}>
-        <View style={styles.itemIcono}>
-        <Image source={require('../../Imagenes_APP/x.jpeg')} style={styles.logoImg}  />
-        </View>
-        <Text style={styles.txtTitulo}>My Rute</Text>
-        </View>
-        <View style={styles.cajaUsuario}>
-        <View style={styles.itemCajaUsuario}>
-        <View style={styles.itemIcono}>
-        {img_user}
-        </View>
-        <TextInput style={styles.txtInp} placeholder={"Ingrese su Correo"}></TextInput>
-        </View>
-        </View>
-        <View style={styles.cajaUsuario}>
-        <View style={styles.itemCajaUsuario}>
-        <View style={styles.itemIcono}>
-        {password}
-        </View>
-        <TextInput style={styles.txtInp} placeholder={"Ingrese su Contraseña"}></TextInput>
-        </View>
-        </View>
-        <View style={styles.btn}>
-        <Button
-        onPress={onClickSingIn}
-        title="Sign In"
-        color="#FE0000"
-        accessibilityLabel="Learn more about this purple button"
-        />
-        </View>
-        </View></ScrollView>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+            <View style={styles.cajaLogin}>
+                <StatusBar backgroundColor="#D32F2F" barStyle="light-content" />
+                
+                <View style={styles.cajaTitulo}>
+                    <View style={styles.itemIcono}>
+                        <Image source={require('../../Imagenes_APP/x.jpeg')} style={styles.logoImg}  />
+                    </View>
+                    <Text style={styles.txtTitulo}>My Rute</Text>
+                </View>
+                <View style={styles.cajaUsuario}>
+                    <View style={styles.itemCajaUsuario}>
+                        <View style={styles.itemIcono}>
+                            {img_user}
+                        </View>
+                        <TextInput style={styles.txtInp} placeholder={"Ingrese su Correo"}></TextInput>
+                    </View>
+                </View>
+                <View style={styles.cajaUsuario}>
+                    <View style={styles.itemCajaUsuario}>
+                        <View style={styles.itemIcono}>
+                        {password}
+                        </View>
+                        <TextInput style={styles.txtInp} placeholder={"Ingrese su Contraseña"}></TextInput>
+                    </View>
+                </View>
+                <View style={styles.btn}>
+                    <Button
+                    onPress={onClickSingIn}
+                    title="Sign In"
+                    color="#FE0000"
+                    accessibilityLabel="Learn more about this purple button"
+                    />
+                </View>
+                <View style={styles.btnFacebook}>
+                    <LoginButton
+                    readPermissions={['public_profile','email']}
+                    onLoginFinished={
+                    (error, result) => {
+                    if (error) {
+                    console.log("login has error: " + result.error);
+                    } else if (result.isCancelled) {
+                    console.log("login is cancelled.");
+                    } else {
+                            AccessToken.getCurrentAccessToken().then(
+                            (data) => {
+                            console.log(data.accessToken.toString())
+                            })
+                        }
+                    }
+                    }
+                    onLogoutFinished={() => console.log("logout.")}
+                    />
+                </View>
+            </View>
+        </ScrollView>
     )
 } 
 export default Login
@@ -94,11 +117,14 @@ const styles = StyleSheet.create(
            
         },
         btn:{
-            width:200,
+            width:195,
         },
         logoImg:{
             width:50,
             height:74
+        },
+        btnFacebook:{
+            marginTop:20
         }
         
   }

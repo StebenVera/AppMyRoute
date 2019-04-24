@@ -10,8 +10,9 @@ import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Login from './Login/CmpLogin'
 import Splash from './splashScreen'
+import Registro from './Registro'
+import Mapa from './Mapa'
 import {Stack,Scene, Router} from 'react-native-router-flux'
-import SplashScreen from 'react-native-splash-screen'
 
 
 export default class App extends Component {
@@ -20,9 +21,10 @@ export default class App extends Component {
       <Router>
           
           <Stack  key="root" > 
+              <Scene key="mapa" component={Mapa} title="My Rute"  />
+              <Scene key="Registro" component={Registro} hideNavBar />
               <Scene key="splah" component={Splash} hideNavBar />
               <Scene key="login" component={Login} hideNavBar  />            
-              
           </Stack>
         
       </Router>
