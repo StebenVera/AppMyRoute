@@ -1,16 +1,19 @@
 import React, {Component} from 'react'
 import {Text,View,StyleSheet,TextInput, Button,StatusBar,Image,ScrollView} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import {Actions} from 'react-native-router-flux'
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
 
-function Login() {
-    const img_user = <Icon name={"user"}  color={"gray"} size={20}/>
-    const password = <Icon name={"lock"} color={"gray"} size={20}/>
-    onClickSingIn=()=>{
-        alert("Herramienta en Construcción")
-        Actions.splah()
+class Login extends Component {
+    constructor(props){
+        super(props);
     }
+    render(){
+        const img_user = <Icon name={"user"}  color={"gray"} size={20}/>
+        const password = <Icon name={"lock"} color={"gray"} size={20}/>
+        onClickSingIn=()=>{
+            this.props.navigation.push('Mapa')
+        }
+
     return(
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.cajaLogin}>
@@ -69,6 +72,7 @@ function Login() {
             </View>
         </ScrollView>
     )
+}
 } 
 export default Login
 

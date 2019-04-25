@@ -1,17 +1,15 @@
 import React, {Component} from 'react'
 import {StyleSheet,Text,View,Image} from 'react-native'
-import {Actions} from 'react-native-router-flux'
 
 export default class Splash extends Component{
+    constructor(props){
+        super(props);
+    }
     componentDidMount(){
        this._Splash()
     }
     _Splash(){
-        let myVar = setInterval(myTimer, 3000);
-        function myTimer() {
-            Actions.login()
-            clearInterval(myVar)
-        }
+        this.props.navigation.push('Login')       
     }
     render()
     {
