@@ -1,33 +1,100 @@
 import React, {Component} from 'react'
-import {StyleSheet,View,Text,TextInput,StatusBar,Button,ScrollView} from 'react-native'
+import {StyleSheet,View,Text,TextInput,StatusBar,Button,ScrollView,Alert} from 'react-native'
+import {createUser} from '../apiClient'
+
 
 export default class ViewRegistros extends Component{
+    state={
+        nombre:'',
+        correo:'',
+        password:''
+    }
     render(){
         onClickRegister=()=>{
-            alert('Registrando')
+            if(this.state.nombre == "" || this.state.correo == "" || this.state.password == ""){
+                Alert.alert(
+                    'Atención',
+                    'Campos nombre, correo y contraseña no pueden estar vacios',
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=> console.log('Ok Pressed')
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+            }
+            else{
+                createUser(this.state.nombre,this.state.correo,this.state.password)
+                .then(response=>{
+                    if(response.estado === 1)
+                    {
+                        Alert.alert(
+                            'Atención',
+                            response.mensaje,
+                            [
+                                {
+                                    text:'Entendido',
+                                    onPress:()=>this.props.navigation.push('Login')
+
+                                }
+                            ],{
+                                cancelable:false
+                            }
+                        )
+                    }
+                    else{
+                        Alert.alert(
+                            'Atención',
+                            String(response.mensaje),
+                            [
+                                {
+                                    text:'Entendido',
+                                    onPress:()=> console.log('Ok Pressed')
+                                }
+                            ],{
+                                cancelable:false
+                            }
+                        )
+                    }
+                   
+                })
+            } 
         }
+     
+
         return(
             <ScrollView contentContainerStyle={styles.contentContainer} >
                 <View style={styles.container}>
                     <StatusBar backgroundColor="#D32F2F" barStyle="light-content" />
-                    <View style={styles.cajaTitulo}>
-                        <Text style={styles.txtTitulo}>REGISTRO</Text>
-                    </View>
                     <Text style={styles.txtLabel}>Nombre</Text>
                     <View style={{flexDirection:"row",padding:5}}>
-                        <TextInput style={styles.txtInp}></TextInput>
+                        <TextInput 
+                        style={styles.txtInp}
+                        onChangeText={(text)=>this.setState({nombre:text})}
+                        value={this.state.nombre}
+                        />
                     </View>
                     <Text style={styles.txtLabel}>Correo</Text>
                     <View style={{flexDirection:"row",padding:5}}>
-                        <TextInput style={styles.txtInp}></TextInput>
+                        <TextInput 
+                        style={styles.txtInp}
+                        onChangeText={(text)=>this.setState({correo:text})}
+                        value={this.state.correo}
+                        />
                     </View>
                     <Text style={styles.txtLabel}>Contraseña</Text>
                     <View style={{flexDirection:"row",padding:5}}>
-                        <TextInput style={styles.txtInp}></TextInput>
+                        <TextInput 
+                        style={styles.txtInp}
+                        onChangeText={(text)=>this.setState({password:text})}
+                        value={this.state.password}
+                        />
                     </View>
                     <View style={styles.btn}>
                         <Button
-                        onPress={onClickRegister}
+                        onPress={()=>onClickRegister()}
                         title="Sign In"
                         color="#FE0000"
                         accessibilityLabel="Learn more about this purple button"

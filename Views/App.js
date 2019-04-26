@@ -29,7 +29,12 @@ const AppNavigator = createStackNavigator({
       })
     },
     Regitro:{
-      screen:Registro
+      screen:Registro,
+      navigationOptions:({
+        navigation
+      })=>({
+         title: "Registro"
+      })
     },
     Mapa:{
       screen:Mapa,
@@ -43,7 +48,7 @@ const AppNavigator = createStackNavigator({
 
 },
 { //Se estable n los parametros para la pila de pantallas
-  initialRouteName:"Mapa",
+  initialRouteName:"Regitro",
   defaultNavigationOptions: {
     header: props => <CmpHeader {...props} />,
     title: "SELECCIONE UNA OPCIÓN",
@@ -54,7 +59,7 @@ const AppNavigator = createStackNavigator({
     },
     headerTitleStyle: {
       fontWeight: "300",
-      color: "#000",
+      color: "#fff",
       fontSize: 25,
       fontFamily:"LeckerliOne-Regular"
     },

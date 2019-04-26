@@ -16,7 +16,7 @@ const CmpHeader = props =>  {
                 <View style={styles.zonaLogo}>
                     <View style={{ width: '18%' }}>
                         <TouchableOpacity onPress={this.onclick} style={styles.touchable}>
-                            <Image source={require('../../Imagenes_APP/logo.png')} style={styles.imgHeader} />
+                            <Image source={require('../../Imagenes_APP/logo_carro.png')} style={styles.imgHeader} />
                         </TouchableOpacity>
                     </View>
                     <View style={{ width: '40%' }}>
@@ -37,7 +37,7 @@ const CmpHeader = props =>  {
 const styles = StyleSheet.create({
     header:
     {
-        width: '100%', height: 60, backgroundColor: '#FF0010', flexDirection: 'row', alignItems: 'center',
+        width: '100%', height: 60, backgroundColor: '#FF5252', flexDirection: 'row', alignItems: 'center',
         marginTop: Platform.OS === 'ios' ? 20 : 0,
     },
     color:
@@ -51,6 +51,6 @@ const styles = StyleSheet.create({
     texto:
         { color: 'white', fontSize: Platform.OS === 'ios' ? 15  : 15.3 },
     txtFecha:
-        {fontFamily:"LeckerliOne-Regular",fontWeight: "300",color:"#000"}
+        {fontWeight: "300",color:"#fff"}
 })
 export default CmpHeader 

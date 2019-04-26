@@ -21,7 +21,7 @@ class Login extends Component {
                 
                 <View style={styles.cajaTitulo}>
                     <View style={styles.itemIcono}>
-                        <Image source={require('../../Imagenes_APP/x.jpeg')} style={styles.logoImg}  />
+                        <Image source={require('../../Imagenes_APP/logo_carro.png')} style={styles.logoImg}  />
                     </View>
                     <Text style={styles.txtTitulo}>My Rute</Text>
                 </View>
