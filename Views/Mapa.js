@@ -3,6 +3,7 @@ import {StyleSheet,View,Text,TextInput,StatusBar,Button,ScrollView,Dimensions,Ba
 import MapView,{PROVIDER_GOOGLE,Polyline,Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import PolyLine from '@mapbox/polyline'
 import apiKey from '../google_api_key'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 const {width,height} = Dimensions.get('window')
 const SCREEN_HEIGHT = height;
 const SCREEE_WIDTH = width;
@@ -28,7 +29,11 @@ export default class ViewRegistros extends Component{
             },
             pointsCoords:[],
             destination:"",
-            predictions:[]
+            predictions:[],
+            textDistancia:'',
+            textTiempo:'',
+            valueDistancia:0,
+            tarifa:0
         }
     }
   
@@ -38,7 +43,13 @@ export default class ViewRegistros extends Component{
         try{
             const response = await fetch(`https://maps.googleapis.com/maps/api/directions/json?origin=${this.state.latitude},${this.state.longitude}&destination=place_id:${destinationPLaceId}&key=${apiKey}`)
             const json = await response.json()
-            console.log(json)
+            let distancia_txt =json.routes[0].legs[0].distance.text
+            let tiempo_txt = json.routes[0].legs[0].duration.text
+            let value_distancia = json.routes[0].legs[0].distance.value
+            let tarifa_calculada = (value_distancia * 1) /1 
+
+
+            this.setState({textDistancia:distancia_txt,textTiempo:tiempo_txt,tarifa:tarifa_calculada})
             const points = PolyLine.decode(json.routes[0].overview_polyline.points)
             const pointsCoords = points.map(point=>{
                 return {latitude:point[0],longitude:point[1]}
@@ -151,6 +162,10 @@ export default class ViewRegistros extends Component{
 
     }
     render(){
+
+        onClickConfirmar=()=>{
+            alert('Confirmando')
+        }
         /*
         
         <MapView
@@ -178,7 +193,7 @@ export default class ViewRegistros extends Component{
                         <MapView
                         rotateEnabled={false}
                         showsCompass={true}
-                        showsUserLocation={true}
+                       ....<<<<< showsUserLocation={true}
                         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                         style={styles.map}
                         region={{
@@ -189,10 +204,39 @@ export default class ViewRegistros extends Component{
                         }}(
                         >
                         </MapView>
+
         */
+
+       let IconoCarro = <Icon  name={"car-alt"}  color={"#FE0000"} size={20}/>
        let marker = null                     
+       let btn = null
        if(this.state.pointsCoords.length > 1){
         marker = (<Marker coordinate ={this.state.pointsCoords[this.state.pointsCoords.length-1]} />)
+        btn = (<View style={{borderColor:"#000",borderWidth:1,borderRadius:10,margin:5,width:"95%",marginBottom:5,justifyContent:"space-between"}}>
+                <View style={{padding:5,flexDirection:"row"}}>
+                        <View style={{justifyContent:"center",alignItems:"center",flexDirection:"row"}} >
+                            {IconoCarro}
+                            <Text style={{marginLeft:5,color:"#000",fontWeight: "300",fontSize:30,fontFamily:"LeckerliOne-Regular"}}>My Rute</Text>
+                         
+                        </View>
+                        
+                        <View style={{flex:1,alignItems:"flex-end",justifyContent:"center"}}>
+                            <Text style={{color:"#000",fontSize:25,fontWeight:"bold",marginTop:30}}> ${this.state.tarifa}</Text>
+                        </View>
+                </View>
+                <View style={{marginLeft:9,paddingBottom:3}}>
+                       <Text style={{color:"#000"}}>Destino a<Text style={{color:"#000",fontWeight:"bold"}}> {this.state.textDistancia}</Text></Text>
+                       <Text style={{color:"#000"}}>Tiempo de viaje<Text style={{color:"#000",fontWeight:"bold"}}> {this.state.textTiempo}</Text></Text>
+                </View>
+                <View style={styles.btn}>
+                            <Button
+                            onPress={()=>onClickConfirmar()}
+                            title="Confirmar"
+                            color="#FE0000"
+                            accessibilityLabel="Learn more about this purple button"
+                            />
+                        </View>
+               </View>)
        }
        const predictions = this.state.predictions.map(prediction => (
         <TouchableOpacity onPress={()=>this.getRouteDirections(prediction.place_id,prediction.structured_formatting.main_text)} key={prediction.id}>
@@ -206,7 +250,7 @@ export default class ViewRegistros extends Component{
         
         return(
                 <View style={styles.container2}>
-                    <StatusBar backgroundColor="#D32F2F" barStyle="light-content" />
+                    <StatusBar backgroundColor="#D32F2F" barStyle="dark-content" />
                    
                     <View style={styles.container}>
                         <MapView
@@ -240,6 +284,10 @@ export default class ViewRegistros extends Component{
                     </View>
                     {predictions}
                     
+                    <View style={{position:"absolute", bottom:0,backgroundColor:"#fff",flex:1, width:"100%",alignItems:"center"}}>
+                        {btn}
+                      
+                    </View>
                 </View>
         )
     }
@@ -263,6 +311,10 @@ const styles = StyleSheet.create({
       map: {
         ...StyleSheet.absoluteFillObject,
       },
+      btn:{
+        width:"100%",
+        padding:10
+    },
       destinationInput: {
         marginTop:10,
         height: 40,

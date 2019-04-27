@@ -47,7 +47,7 @@ export default class ViewRegistros extends Component{
                     else{
                         Alert.alert(
                             'Atención',
-                            String(response.mensaje),
+                            response.mensaje,
                             [
                                 {
                                     text:'Entendido',
@@ -95,7 +95,7 @@ export default class ViewRegistros extends Component{
                     <View style={styles.btn}>
                         <Button
                         onPress={()=>onClickRegister()}
-                        title="Sign In"
+                        title="Registrar"
                         color="#FE0000"
                         accessibilityLabel="Learn more about this purple button"
                         />

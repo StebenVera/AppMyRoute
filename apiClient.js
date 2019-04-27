@@ -21,4 +21,23 @@ function createUser(nombre,correo,password){
           
 }
 
-export  {createUser}
+
+function postLogin(correo,password) {
+    return fetch(url+'login',{
+        method:'POST',
+        headers:{
+         Accept: 'application/json',
+         'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            correo,
+            password
+        })
+     }).then(response => response.json())
+       .then(data =>{
+           return data
+       })
+      
+}
+
+export  {createUser,postLogin}

@@ -19,7 +19,7 @@ const CmpHeader = props =>  {
                             <Image source={require('../../Imagenes_APP/logo_carro.png')} style={styles.imgHeader} />
                         </TouchableOpacity>
                     </View>
-                    <View style={{ width: '40%' }}>
+                    <View style={{ width: '50%' }}>
                         <Header {...props} />
                     </View>
                     <View>
@@ -37,7 +37,7 @@ const CmpHeader = props =>  {
 const styles = StyleSheet.create({
     header:
     {
-        width: '100%', height: 60, backgroundColor: '#FF5252', flexDirection: 'row', alignItems: 'center',
+        width: '100%', height: 60, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center',
         marginTop: Platform.OS === 'ios' ? 20 : 0,
     },
     color:
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
     zonaLogo:
         { width: '100%', flexDirection: 'row', height: '100%', alignItems: 'center', alignContent: 'center', marginLeft: 5 },
     texto:
-        { color: 'white', fontSize: Platform.OS === 'ios' ? 15  : 15.3 },
+        { color: '#000', fontSize: Platform.OS === 'ios' ? 15  : 15.3 },
     txtFecha:
-        {fontWeight: "300",color:"#fff"}
+        {fontWeight: "300",color:"#000"}
 })
 export default CmpHeader 

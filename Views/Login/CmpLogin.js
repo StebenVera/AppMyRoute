@@ -1,23 +1,84 @@
 import React, {Component} from 'react'
-import {Text,View,StyleSheet,TextInput, Button,StatusBar,Image,ScrollView} from 'react-native'
+import {Text,View,StyleSheet,TextInput, Button,StatusBar,Image,ScrollView,Alert} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
-
+import {postLogin} from '../../apiClient'
 class Login extends Component {
     constructor(props){
         super(props);
     }
+
+    state={
+        correo:'',
+        password:''
+    }
+
+
     render(){
         const img_user = <Icon name={"user"}  color={"gray"} size={20}/>
         const password = <Icon name={"lock"} color={"gray"} size={20}/>
         onClickSingIn=()=>{
-            this.props.navigation.push('Mapa')
+            if(this.state.correo == '' || this.state.password == ''){
+                Alert.alert(
+                    'Atención',
+                    'Campos correo y contraseña no pueden estar vacios',
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=> console.log('Ok Pressed')
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+            }
+            else{
+            postLogin(this.state.correo,this.state.password)
+            .then(data =>{
+                
+                if(data.estado == 1){
+                    Alert.alert(
+                        'Atención',
+                        data.mensaje,
+                        [
+                            {
+                                text:'Entendido',
+                                onPress:()=>this.props.navigation.push('Mapa')
+
+    
+                            }
+                        ],{
+                            cancelable:false
+                        }
+                    )
+                    
+                }else{
+                    Alert.alert(
+                        'Atención',
+                        data.mensaje,
+                        [
+                            {
+                                text:'Entendido',
+                                onPress:()=>console.log('Ok Pressed')
+
+                            }
+                        ],{
+                            cancelable:false
+                        }
+                    )
+                }
+                console.log(data)
+            })
+         }
+        }
+        goClikcRegistro=()=>{
+            this.props.navigation.push('Regitro')
         }
 
     return(
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
             <View style={styles.cajaLogin}>
-                <StatusBar backgroundColor="#D32F2F" barStyle="light-content" />
+                <StatusBar backgroundColor="#D32F2F" barStyle="dark-content" />
                 
                 <View style={styles.cajaTitulo}>
                     <View style={styles.itemIcono}>
@@ -30,7 +91,12 @@ class Login extends Component {
                         <View style={styles.itemIcono}>
                             {img_user}
                         </View>
-                        <TextInput style={styles.txtInp} placeholder={"Ingrese su Correo"}></TextInput>
+                        <TextInput 
+                        style={styles.txtInp} 
+                        placeholder={"Ingrese su Correo"}
+                        onChangeText={(text)=>this.setState({correo:text})}
+                        value ={this.state.correo}
+                        />
                     </View>
                 </View>
                 <View style={styles.cajaUsuario}>
@@ -38,12 +104,18 @@ class Login extends Component {
                         <View style={styles.itemIcono}>
                         {password}
                         </View>
-                        <TextInput style={styles.txtInp} placeholder={"Ingrese su Contraseña"}></TextInput>
+                        <TextInput style={styles.txtInp} 
+                        placeholder={"Ingrese su Contraseña"}
+                        onChangeText={(text)=>this.setState({password:text})}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        />
                     </View>
                 </View>
+               
                 <View style={styles.btn}>
                     <Button
-                    onPress={onClickSingIn}
+                    onPress={()=>onClickSingIn()}
                     title="Sign In"
                     color="#FE0000"
                     accessibilityLabel="Learn more about this purple button"
@@ -61,13 +133,17 @@ class Login extends Component {
                     } else {
                             AccessToken.getCurrentAccessToken().then(
                             (data) => {
-                            console.log(data.accessToken.toString())
-                            })
+                            //console.log(data.accessToken.toString())
+                                this.props.navigation.push('Mapa')
+                        })
                         }
                     }
                     }
                     onLogoutFinished={() => console.log("logout.")}
                     />
+                </View>
+                <View style={styles.cajaCuenta}>
+                    <Text onPress={()=>goClikcRegistro()}>No tienes una Cuenta? <Text style={styles.txtCuenta}>Registrate Aqui</Text></Text>
                 </View>
             </View>
         </ScrollView>
@@ -129,6 +205,12 @@ const styles = StyleSheet.create(
         },
         btnFacebook:{
             marginTop:20
+        },
+        cajaCuenta:{
+            padding:25
+        },
+        txtCuenta:{
+            color:"#FF5252"
         }
         
   }

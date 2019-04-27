@@ -48,7 +48,7 @@ const AppNavigator = createStackNavigator({
 
 },
 { //Se estable n los parametros para la pila de pantallas
-  initialRouteName:"Regitro",
+  initialRouteName:"Mapa",
   defaultNavigationOptions: {
     header: props => <CmpHeader {...props} />,
     title: "SELECCIONE UNA OPCIÓN",
@@ -59,8 +59,8 @@ const AppNavigator = createStackNavigator({
     },
     headerTitleStyle: {
       fontWeight: "300",
-      color: "#fff",
-      fontSize: 25,
+      color: "black",
+      fontSize: 30,
       fontFamily:"LeckerliOne-Regular"
     },
     headerTintColor: "#fff",
