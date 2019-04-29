@@ -47,8 +47,7 @@ export default class ViewRegistros extends Component{
             let tiempo_txt = json.routes[0].legs[0].duration.text
             let value_distancia = json.routes[0].legs[0].distance.value
             let tarifa_calculada = (value_distancia * 1) /1 
-
-
+         
             this.setState({textDistancia:distancia_txt,textTiempo:tiempo_txt,tarifa:tarifa_calculada})
             const points = PolyLine.decode(json.routes[0].overview_polyline.points)
             const pointsCoords = points.map(point=>{
@@ -164,7 +163,26 @@ export default class ViewRegistros extends Component{
     render(){
 
         onClickConfirmar=()=>{
-            alert('Confirmando')
+            Alert.alert(
+                'Atención',
+                'Desea confirmar su Viaje',
+                [   
+                    {
+                        text: 'No',
+                        onPress: () => {
+                        return false
+                        }
+                    },
+                    {
+                        text:'Si',
+                        onPress:()=> this.props.navigation.push('Conductores')
+                    }
+                ],{
+                    
+                    cancelable:false
+                }
+            )
+         
         }
         /*
         

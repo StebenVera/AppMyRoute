@@ -21,6 +21,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -39,11 +40,13 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-              new MainReactPackage(),
-            new RNGestureHandlerPackage(),
-            new MapsPackage(),
-              new FBSDKPackage(mCallbackManager),
-              new VectorIconsPackage()
+             new MainReactPackage(),
+             new RNGestureHandlerPackage(),
+             new MapsPackage(),
+             new FBSDKPackage(mCallbackManager),
+             new VectorIconsPackage(),
+             new SplashScreenReactPackage() //here
+
       );
     }
 

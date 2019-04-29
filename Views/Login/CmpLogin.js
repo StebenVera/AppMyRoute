@@ -3,14 +3,23 @@ import {Text,View,StyleSheet,TextInput, Button,StatusBar,Image,ScrollView,Alert}
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { LoginButton, AccessToken } from 'react-native-fbsdk';
 import {postLogin} from '../../apiClient'
+import SplashScreen from 'react-native-splash-screen'
 class Login extends Component {
     constructor(props){
         super(props);
+        this.state={
+            correo:'',
+            password:''
+        }
     }
 
-    state={
-        correo:'',
-        password:''
+
+
+  
+
+    componentDidMount(){
+      
+        SplashScreen.hide();
     }
 
 

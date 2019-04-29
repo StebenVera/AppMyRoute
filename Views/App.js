@@ -11,17 +11,13 @@ import Login from './Login/CmpLogin'
 import Splash from './splashScreen'
 import Registro from './Registro'
 import Mapa from './Mapa'
+import BoxDriver from './BoxDriver'
 import CmpHeader from './staticComponent/Header'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 
 
 const AppNavigator = createStackNavigator({
-    Splash:{
-      screen: Splash,
-      navigationOptions: ({
-        header:null
-     })
-    },
+  
     Login:{
       screen:Login,
       navigationOptions: ({
@@ -44,11 +40,25 @@ const AppNavigator = createStackNavigator({
         title: "My Rute",
         
       }),
+    },
+    Conductores:{
+      screen:BoxDriver,
+      navigationOptions: ({
+        navigation
+      }) => ({
+        title: "Conductores",
+        headerTitleStyle:{
+          fontSize:23,
+          fontWeight: "300",
+          color: "black",
+          fontFamily:"LeckerliOne-Regular"
+        }
+      }),
     }
 
 },
 { //Se estable n los parametros para la pila de pantallas
-  initialRouteName:"Mapa",
+  initialRouteName:"Login",
   defaultNavigationOptions: {
     header: props => <CmpHeader {...props} />,
     title: "SELECCIONE UNA OPCIÓN",
@@ -73,6 +83,7 @@ const AppNavigator = createStackNavigator({
 const AppContainer = createAppContainer(AppNavigator)
 
 export default class App extends Component {
+
   render() {
     return <AppContainer />;
   }

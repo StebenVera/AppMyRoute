@@ -1,12 +1,20 @@
 package com.myrute;
-
+import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 
+import org.devio.rn.splashscreen.SplashScreen;
+
 public class MainActivity extends ReactActivity {
+
+   @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        SplashScreen.show(this);  // here 
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

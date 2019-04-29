@@ -6,11 +6,8 @@ export default class Splash extends Component{
         super(props);
     }
     componentDidMount(){
-       this._Splash()
     }
-    _Splash(){
-        this.props.navigation.push('Login')       
-    }
+    
     render()
     {
         
@@ -18,7 +15,7 @@ export default class Splash extends Component{
            <View style={styles.container}>
                 <View style={styles.cajaTitulo}>
                     <View style={styles.itemIcono}>
-                        <Image source={require('../Imagenes_APP/x.jpeg')} style={styles.logoImg}  />
+                        <Image source={require('../Imagenes_APP/logo_carro.png')} style={styles.logoImg}  />
                     </View>
                 <Text style={styles.txtTitulo}>My Rute</Text>
                     </View>
@@ -38,7 +35,7 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     txtTitulo:{
-        fontSize:50,
+        fontSize:60,
         color:"black",
         fontFamily:"LeckerliOne-Regular"
     },
