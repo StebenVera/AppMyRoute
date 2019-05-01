@@ -9,8 +9,8 @@
 
     <style name="datePickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">#FE0000</item>
-        <item name="colorControlActivated">#51bc28</item>
-        <item name="colorControlHighlight">#ba4b99</item>
+        <item name="colorControlActivated">#000</item>
+        <item name="colorControlHighlight">#FE0000</item>
     </style>
     <style name="timePickerTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">#FE0000</item>

@@ -1,21 +1,41 @@
 import React,{Component} from 'react'
-import {View,Text,StyleSheet,ScrollView,Image,TextInput,Button} from 'react-native'
+import {View,Text,StyleSheet,ScrollView,Image,TextInput,Button,Alert} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import DatePicker from 'react-native-datepicker'
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { saveTravel } from '../apiClient'
 import moment from 'moment'
 class BoxDriver extends Component{
     state={
-        date:"2019-04-27",
+        date:"",
         hora:"",
         isDateTimePickerVisible: false,
         isDateTimePickerVisible2:false,
-        isDateTimePickerVisible3:false
-
+        isDateTimePickerVisible3:false,
+        nombreUsuario:"",
+        distancia:"",
+        tiempo:"",
+        tarifa:"",
+        destino:""
     }
+    
+      componentDidMount(){
+        var date = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        var year = new Date().getFullYear();
+        var fecha = year+'-'+month+'-'+date
 
-
+        let nombreUsuario = this.props.navigation.state.params.nombreUsuario
+        let tiempo = this.props.navigation.state.params.tiempo
+        let tarifa = this.props.navigation.state.params.tarifa
+        let distancia = this.props.navigation.state.params.distancia
+        let destino = this.props.navigation.state.params.destino
+        this.setState({date:fecha,nombreUsuario,tiempo,tarifa,distancia,destino})
+       
+    }
+      
+      
      
       showDateTimePicker = () => {
         this.setState({ isDateTimePickerVisible: true });
@@ -55,7 +75,112 @@ class BoxDriver extends Component{
     render()
     {
     onClickViajar=()=>{
-        alert('Viaje asignado')
+        let {nombreUsuario,date,hora,distancia,tiempo,tarifa,destino} = this.state
+  
+        saveTravel(nombreUsuario,date,hora,"Steven Gómez",distancia,tiempo,tarifa,"EUV-410",destino)
+        .then(data=>{
+            if(data.estado == 1){
+                Alert.alert(
+                    'Atención',
+                    data.mensaje,
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=> this.props.navigation.push('Mapa',{nombreDB:this.state.nombreUsuario})    
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+                
+            }else{
+                Alert.alert(
+                    'Atención',
+                    'Ocurrio un erro al intentar asignar el viaje'
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=>console.log('Ok Pressed')
+
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+            }
+        })
+    }
+    onClickViajar2=()=>{
+        let {nombreUsuario,date,hora,distancia,tiempo,tarifa,destino} = this.state
+  
+        saveTravel(nombreUsuario,date,hora,"Laura Camacho",distancia,tiempo,tarifa,"THA-231",destino)
+        .then(data=>{
+            if(data.estado == 1){
+                Alert.alert(
+                    'Atención',
+                    data.mensaje,
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=> this.props.navigation.push('Mapa',{nombreDB:this.state.nombreUsuario})    
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+                
+            }else{
+                Alert.alert(
+                    'Atención',
+                    'Ocurrio un erro al intentar asignar el viaje'
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=>console.log('Ok Pressed')
+
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+            }
+        })
+    }
+    onClickViajar3=()=>{
+        let {nombreUsuario,date,hora,distancia,tiempo,tarifa,destino} = this.state
+  
+        saveTravel(nombreUsuario,date,hora,"Fernando Lozada",distancia,tiempo,tarifa,"PHG-245",destino)
+        .then(data=>{
+            if(data.estado == 1){
+                Alert.alert(
+                    'Atención',
+                    data.mensaje,
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=> this.props.navigation.push('Mapa',{nombreDB:this.state.nombreUsuario})    
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+                
+            }else{
+                Alert.alert(
+                    'Atención',
+                    'Ocurrio un erro al intentar asignar el viaje'
+                    [
+                        {
+                            text:'Entendido',
+                            onPress:()=>console.log('Ok Pressed')
+
+                        }
+                    ],{
+                        cancelable:false
+                    }
+                )
+            }
+        })
     }
     const image_client = <Icon name="user" size={50} color="#FF5252" />;
     const image_estrella = <Icon name="star" size={25} color="#FE0000"/>
@@ -93,8 +218,8 @@ class BoxDriver extends Component{
                             mode="date"
                             placeholder="select date"
                             format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2016-06-01"
+                            minDate={this.state.date}
+                            maxDate="2050-12-31"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
@@ -159,8 +284,8 @@ class BoxDriver extends Component{
                             mode="date"
                             placeholder="select date"
                             format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2016-06-01"
+                            minDate={this.state.date}
+                            maxDate="2050-12-31"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
@@ -176,7 +301,7 @@ class BoxDriver extends Component{
                             // ... You can check the source to find the other keys.
                             }}
                             onDateChange={(date) => {this.setState({date: date})}}
-                        />
+                            />  
                         
                             <View style={{flexDirection:"row",alignItems:"center"}}>
                                 <Icon2 name="clockcircleo" size={25}  color="#FF5252"onPress={this.showDateTimePicker2} />
@@ -191,7 +316,7 @@ class BoxDriver extends Component{
                             </View>
                             <View>
                                 <Button
-                                onPress={()=>onClickViajar()}
+                                onPress={()=>onClickViajar2()}
                                 title="Viajar"
                                 color="#FE0000"
                                 accessibilityLabel="Learn more about this purple button"
@@ -219,13 +344,13 @@ class BoxDriver extends Component{
                     </View>
                     <View style={styles.cajaViajar}>
                         <DatePicker
-                            style={{width: 100}}
+                            style={{width: 120}}
                             date={this.state.date}
                             mode="date"
                             placeholder="select date"
                             format="YYYY-MM-DD"
-                            minDate="2016-05-01"
-                            maxDate="2016-06-01"
+                            minDate={this.state.date}
+                            maxDate="2050-12-31"
                             confirmBtnText="Confirm"
                             cancelBtnText="Cancel"
                             customStyles={{
@@ -242,7 +367,6 @@ class BoxDriver extends Component{
                             }}
                             onDateChange={(date) => {this.setState({date: date})}}
                         />
-                        
                             <View style={{flexDirection:"row",alignItems:"center"}}>
                                 <Icon2 name="clockcircleo" size={25}  color="#FF5252"onPress={this.showDateTimePicker3} />
                                 <DateTimePicker
@@ -256,7 +380,7 @@ class BoxDriver extends Component{
                             </View> 
                             <View>
                                 <Button
-                                onPress={()=>onClickViajar()}
+                                onPress={()=>onClickViajar3()}
                                 title="Viajar"
                                 color="#FE0000"
                                 accessibilityLabel="Learn more about this purple button"

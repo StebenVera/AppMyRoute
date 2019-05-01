@@ -1,36 +1,47 @@
 import React, { Component } from 'react';
-import { Platform, Image, StyleSheet, View, Text, TouchableOpacity} from 'react-native'
+import {AsyncStorage, Platform, Image, StyleSheet, View, Text, TouchableOpacity} from 'react-native'
 import { Header } from "react-navigation";
-
-const CmpHeader = props =>  {
-    onclick = () => {
-        props.navigation.navigate('Mapa');
+class CmpHeader extends Component  {
+    constructor(props){
+        super(props)
     }
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var fecha = date + '-' + month + '-' + year
-    return (
-        <View>
-            <View style={styles.header}>
-                <View style={styles.zonaLogo}>
-                    <View style={{ width: '18%' }}>
-                        <TouchableOpacity onPress={this.onclick} style={styles.touchable}>
-                            <Image source={require('../../Imagenes_APP/logo_carro.png')} style={styles.imgHeader} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ width: '50%' }}>
-                        <Header {...props} />
-                    </View>
-                    <View>
-                        <Text style={styles.txtFecha}>{fecha}</Text>
-                    </View>
-                </View>
+
+   state={
+       
+   }
     
-            </View>
+
+  
+    render(){
+        onclick = () => {
+            this.props.navigation.navigate('Mapa');
+        }
+        var date = new Date().getDate();
+        var month = new Date().getMonth() + 1;
+        var year = new Date().getFullYear();
+        var fecha = date + '-' + month + '-' + year
+            return (
+                <View>
+                    <View style={styles.header}>
+                        <View style={styles.zonaLogo}>
+                            <View style={{ width: '18%' }}>
+                                <TouchableOpacity onPress={this.onclick} style={styles.touchable}>
+                                    <Image source={require('../../Imagenes_APP/logo_carro.png')} style={styles.imgHeader} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={{ width: '50%' }}>
+                                <Header {...this.props} />
+                            </View>
+                            <View>
+                                <Text style={styles.txtFecha}>{fecha}</Text>
+                            </View>
+                        </View>
             
-        </View>
-    )
+                    </View>
+                    
+                </View>
+            )
+        }
     }
 
 

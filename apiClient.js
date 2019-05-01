@@ -40,4 +40,43 @@ function postLogin(correo,password) {
       
 }
 
-export  {createUser,postLogin}
+function saveTravel(nombre,fecha,hora,nombreConductor,distancia,tiempo,tarifa,placa,destino) {
+    return fetch(url+'viaje',{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+            nombre,
+            fecha,
+            hora,
+            nombreConductor,
+            distancia,
+            tiempo,
+            tarifa,
+            placa,
+            destino
+        })
+    }).then(response => response.json())
+      .then(data=>{
+          return data
+      })    
+}
+
+function getViajes(nombre) {
+    return fetch(url+'viajeRegistro',{
+        method:'POST',
+        headers:{
+            Accept:'application/json',
+            'Content-Type': 'application/json',
+        },
+        body:JSON.stringify({
+            nombre
+        })
+    }).then(response => response.json())
+      .then(data =>{
+          return data
+      })
+}
+export  {createUser,postLogin, saveTravel,getViajes}

@@ -9,18 +9,19 @@ class Login extends Component {
         super(props);
         this.state={
             correo:'',
-            password:''
+            password:'',
+            usuarioNombre:''
         }
     }
 
 
 
-  
-
     componentDidMount(){
       
         SplashScreen.hide();
+
     }
+
 
 
     render(){
@@ -44,7 +45,7 @@ class Login extends Component {
             else{
             postLogin(this.state.correo,this.state.password)
             .then(data =>{
-                
+                this.setState({usuarioNombre:data.usuario.nombre})
                 if(data.estado == 1){
                     Alert.alert(
                         'Atención',
@@ -52,9 +53,9 @@ class Login extends Component {
                         [
                             {
                                 text:'Entendido',
-                                onPress:()=>this.props.navigation.push('Mapa')
-
-    
+                                onPress:()=>{
+                                        this.props.navigation.push('Mapa',{nombreDB:this.state.usuarioNombre})  
+                                        }  
                             }
                         ],{
                             cancelable:false
@@ -76,7 +77,7 @@ class Login extends Component {
                         }
                     )
                 }
-                console.log(data)
+               // console.log(data)
             })
          }
         }
@@ -86,7 +87,9 @@ class Login extends Component {
 
     return(
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
+
             <View style={styles.cajaLogin}>
+
                 <StatusBar backgroundColor="#D32F2F" barStyle="dark-content" />
                 
                 <View style={styles.cajaTitulo}>

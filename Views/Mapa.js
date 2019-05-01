@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
-import {StyleSheet,View,Text,TextInput,StatusBar,Button,ScrollView,Dimensions,BackHandler,Alert,TouchableOpacity,Keyboard} from 'react-native'
+import {Animated,Image,AsyncStorage,StyleSheet,View,Text,TextInput,StatusBar,Button,ScrollView,Dimensions,BackHandler,Alert,TouchableOpacity,Keyboard} from 'react-native'
 import MapView,{PROVIDER_GOOGLE,Polyline,Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import PolyLine from '@mapbox/polyline'
 import apiKey from '../google_api_key'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import {getViajes} from "../apiClient"
+import CmpHeader from './staticComponent/Header'
+import ListViajes from './ListViajes'
 const {width,height} = Dimensions.get('window')
 const SCREEN_HEIGHT = height;
 const SCREEE_WIDTH = width;
@@ -33,7 +36,10 @@ export default class ViewRegistros extends Component{
             textDistancia:'',
             textTiempo:'',
             valueDistancia:0,
-            tarifa:0
+            tarifa:0,
+            nombreUsuario:"",
+            dataViajes:[],
+            visibleViajes:false
         }
     }
   
@@ -81,7 +87,6 @@ export default class ViewRegistros extends Component{
   
 
 
-
     watchID: ?number = null
     componentDidMount(){
          navigator.geolocation.getCurrentPosition(
@@ -95,6 +100,20 @@ export default class ViewRegistros extends Component{
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
           );
+
+            let nombreDB = this.props.navigation.state.params.nombreDB
+    
+            let guardarNombre = async()=>{
+                const guardoEstado= await this.setState({nombreUsuario:nombreDB})
+                getViajes(this.state.nombreUsuario)
+                .then(res =>{
+                    console.log(res)
+                    this.setState({dataViajes:res})
+                })
+            }
+            guardarNombre();
+           
+                
         /*
           Nos permite obtener la region inicial y colocar un markador en esa posición
         navigator.geolocation.getCurrentPosition((position)=>{
@@ -160,8 +179,14 @@ export default class ViewRegistros extends Component{
     return true;
 
     }
-    render(){
 
+    onClickViajesPendientes = ()=>{
+        this.setState((prevState, prevProps) => ({
+            visibleViajes: !prevState.visibleViajes
+        }))
+
+    }
+    render(){
         onClickConfirmar=()=>{
             Alert.alert(
                 'Atención',
@@ -175,7 +200,7 @@ export default class ViewRegistros extends Component{
                     },
                     {
                         text:'Si',
-                        onPress:()=> this.props.navigation.push('Conductores')
+                        onPress:()=> this.props.navigation.push('Conductores',{distancia:this.state.textDistancia,tiempo:this.state.textTiempo,tarifa:this.state.tarifa.toString(),nombreUsuario:this.state.nombreUsuario,destino:this.state.destination})
                     }
                 ],{
                     
@@ -265,11 +290,23 @@ export default class ViewRegistros extends Component{
             </View>
         </TouchableOpacity>
       ));
+
+        let viajes = null
+        console.log(this.state.dataViajes)
+        if(this.state.visibleViajes === true)
+        {
+            viajes =(<View style={{position:"absolute",bottom:50,flex:1,backgroundColor:"rgba(255,255,255,.7)",height:"50%",width:"100%"}}>
+                            <Text style={styles.txtTitulo} >VIAJES ASIGNADOS</Text>                   
+                            <ListViajes  viajes={this.state.dataViajes.usuarioDb} /> 
+                         
+                        </View>)
+        }
         
+
         return(
                 <View style={styles.container2}>
                     <StatusBar backgroundColor="#D32F2F" barStyle="dark-content" />
-                   
+                    
                     <View style={styles.container}>
                         <MapView
                             ref={map =>{
@@ -302,10 +339,20 @@ export default class ViewRegistros extends Component{
                     </View>
                     {predictions}
                     
-                    <View style={{position:"absolute", bottom:0,backgroundColor:"#fff",flex:1, width:"100%",alignItems:"center"}}>
+                    <View style={{position:"absolute", bottom:0,backgroundColor:"#fff",flex:1, width:"100%",alignItems:"center",zIndex:2}}>
                         {btn}
                       
                     </View>
+                    <TouchableOpacity  onPress={()=>{this.onClickViajesPendientes()}} style={{width:"100%",position:"absolute",bottom:0,zIndex:1}}>
+                        <View style={{backgroundColor:"#fff"}}>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%"}}>
+                                <Image  source={require('../Imagenes_APP/viaje3.png')} style={{maxHeight:60,maxWidth:60}} />
+                                <Text style={{fontSize:20,color:"#000",fontWeight:"bold"}}>{this.state.dataViajes.contador}</Text>
+                               
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    {viajes}
                 </View>
         )
     }
@@ -352,5 +399,12 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         borderRadius:5
-      }
+      },
+      txtTitulo:{
+        fontSize:20,
+        color:"#000",
+        textAlign:"center",
+        padding:5,
+        fontWeight:"bold"
+    }
 })
