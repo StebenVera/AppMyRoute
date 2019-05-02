@@ -145,8 +145,8 @@ class Login extends Component {
                     } else {
                             AccessToken.getCurrentAccessToken().then(
                             (data) => {
-                            //console.log(data.accessToken.toString())
-                                this.props.navigation.push('Mapa')
+                            //console.log(data)
+                               this.props.navigation.push('Mapa')
                         })
                         }
                     }

@@ -1,5 +1,6 @@
 import React from 'react'
 import {View,Text,StyleSheet} from 'react-native'
+import moment from 'moment'
 
 
 function BoxViajes (props) {
@@ -16,7 +17,7 @@ function BoxViajes (props) {
                 borderColor:"#FE0000",
                 borderWidth:1}}>
                     <Text style={{backgroundColor:"#FE0000",textAlign:"center",color:"#fff",borderTopRightRadius:10,borderTopLeftRadius:10}}>{props.viajes.nombreConductor}</Text>
-                    <Text style={{textAlign:"center",color:"#000"}}><Text>{props.viajes.hora} </Text> {props.viajes.fecha}</Text>
+                    <Text style={{textAlign:"center",color:"#000"}}><Text>{props.viajes.hora} </Text> { moment(props.viajes.fecha).format('YYYY-MM-DD') }</Text>
                     <Text style={{textAlign:"center",color:"#000"}}><Text>{props.viajes.destino}</Text> {props.viajes.distancia}</Text>
                     <Text style={{textAlign:"center",color:"#000"}}>{props.viajes.placa}</Text>
                     <Text style={{textAlign:"center",color:"#000",fontWeight:"bold"}}>${props.viajes.tarifa}</Text>

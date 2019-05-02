@@ -3,7 +3,9 @@ import {Animated,Image,AsyncStorage,StyleSheet,View,Text,TextInput,StatusBar,But
 import MapView,{PROVIDER_GOOGLE,Polyline,Marker} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import PolyLine from '@mapbox/polyline'
 import apiKey from '../google_api_key'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import Icon from 'react-native-vector-icons/FontAwesome5' //Ionicons
+import Icon2 from 'react-native-vector-icons/Ionicons' //Ionicons
+
 import {getViajes} from "../apiClient"
 import CmpHeader from './staticComponent/Header'
 import ListViajes from './ListViajes'
@@ -39,7 +41,8 @@ export default class ViewRegistros extends Component{
             tarifa:0,
             nombreUsuario:"",
             dataViajes:[],
-            visibleViajes:false
+            visibleViajes:false,
+            visibleChat:false
         }
     }
   
@@ -101,8 +104,14 @@ export default class ViewRegistros extends Component{
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
           );
 
-            let nombreDB = this.props.navigation.state.params.nombreDB
-    
+            try{
+                var nombreDB = this.props.navigation.state.params.nombreDB 
+
+            }catch(error)
+            {
+                
+            }
+            try{
             let guardarNombre = async()=>{
                 const guardoEstado= await this.setState({nombreUsuario:nombreDB})
                 getViajes(this.state.nombreUsuario)
@@ -112,6 +121,9 @@ export default class ViewRegistros extends Component{
                 })
             }
             guardarNombre();
+        } catch{
+
+        }
            
                 
         /*
@@ -186,6 +198,11 @@ export default class ViewRegistros extends Component{
         }))
 
     }
+    onClickChats = ()=>{
+        this.setState((prevState, prevProps) => ({
+            visibleChat: !prevState.visibleChat
+        }))
+    }
     render(){
         onClickConfirmar=()=>{
             Alert.alert(
@@ -251,6 +268,7 @@ export default class ViewRegistros extends Component{
         */
 
        let IconoCarro = <Icon  name={"car-alt"}  color={"#FE0000"} size={20}/>
+       let IconoAdd = <Icon2 name={"ios-add-circle"} color={"#FE0000"} size={40} />
        let marker = null                     
        let btn = null
        if(this.state.pointsCoords.length > 1){
@@ -292,6 +310,7 @@ export default class ViewRegistros extends Component{
       ));
 
         let viajes = null
+        let chat =  null
         console.log(this.state.dataViajes)
         if(this.state.visibleViajes === true)
         {
@@ -302,6 +321,14 @@ export default class ViewRegistros extends Component{
                         </View>)
         }
         
+        if(this.state.visibleChat === true){
+            chat = (
+                <View style={{position:"absolute",bottom:50,flex:1,backgroundColor:"rgba(255,255,255,.7)",height:"90%",width:"100%",justifyContent:"center",alignItems:"center"}}>
+                    <Text style={{color:"#000",fontWeight:"bold",fontSize:20}}>Aun no tienes chats</Text>
+                    {IconoAdd}
+                </View>
+            )
+        }
 
         return(
                 <View style={styles.container2}>
@@ -343,7 +370,7 @@ export default class ViewRegistros extends Component{
                         {btn}
                       
                     </View>
-                    <TouchableOpacity  onPress={()=>{this.onClickViajesPendientes()}} style={{width:"100%",position:"absolute",bottom:0,zIndex:1}}>
+                    <TouchableOpacity  onPress={()=>{this.onClickViajesPendientes()}} style={{width:"50%",position:"absolute",bottom:0,zIndex:1}}>
                         <View style={{backgroundColor:"#fff"}}>
                             <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%"}}>
                                 <Image  source={require('../Imagenes_APP/viaje3.png')} style={{maxHeight:60,maxWidth:60}} />
@@ -352,7 +379,16 @@ export default class ViewRegistros extends Component{
                             </View>
                         </View>
                     </TouchableOpacity>
+                    
+                    <TouchableOpacity  onPress={()=>{this.onClickChats()}} style={{width:"50%",position:"absolute",bottom:0,right:0,zIndex:1}}>
+                        <View style={{backgroundColor:"#fff"}}>
+                            <View style={{flexDirection:"row",alignItems:"center",justifyContent:"center",width:"100%"}}>
+                                <Image  source={require('../Imagenes_APP/chat.png')} style={{maxHeight:60,maxWidth:60}} />
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                     {viajes}
+                    {chat}
                 </View>
         )
     }
